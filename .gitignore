@@ -454,3 +454,5 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 /.vscode
 /esdata/nodes/0
+/broker/data
+/zoo/data/version-2
