@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using MvcMovie.Web.Data;
@@ -7,16 +8,21 @@ using MvcMovie.Web.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
+using Confluent.Kafka;
+using System.Text.Json;
 
 namespace MvcMovie.Web.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly MvcMovieContext _context;
+        private readonly ILogger<MoviesController> _logger;
 
-        public MoviesController(MvcMovieContext context)
+        public MoviesController(MvcMovieContext context, ILogger<MoviesController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Movies
@@ -25,11 +31,11 @@ namespace MvcMovie.Web.Controllers
         {
             // Use LINQ to get list of genres.
             IQueryable<string> genreQuery = from m in _context.Movie
-                orderby m.Genre
-                select m.Genre;
+                                            orderby m.Genre
+                                            select m.Genre;
 
             var movies = from m in _context.Movie
-                select m;
+                         select m;
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -85,6 +91,7 @@ namespace MvcMovie.Web.Controllers
             {
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
+                PublishMessageToKafka(movie);
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -173,6 +180,33 @@ namespace MvcMovie.Web.Controllers
         private bool MovieExists(int id)
         {
             return _context.Movie.Any(e => e.Id == id);
+        }
+
+        public void PublishMessageToKafka<T>(T message)
+        {
+            string jsonString = JsonSerializer.Serialize(message);
+
+            var config = new ProducerConfig
+            {
+                BootstrapServers = "localhost:9092"
+            };
+
+            using (var producer = new ProducerBuilder<Null, string>(config).Build())
+            {
+                try
+                {
+                    producer
+                        .ProduceAsync("movie", new Message<Null, string> { Value = jsonString });
+                }
+                catch (ProduceException<Null, string> ex)
+                {
+                    _logger.LogError(ex, ex.Error.Reason);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                }
+            }
         }
     }
 }
