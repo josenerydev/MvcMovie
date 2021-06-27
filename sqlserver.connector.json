@@ -8,8 +8,8 @@
         "database.password": "Password_01",
         "database.dbname": "MvcMovieContext-b095a95a-d3f1-479b-adca-25e229c822af",
         "database.server.name": "mssql-server", 
-        "table.include.list": "Movie",
-        "database.history.kafka.bootstrap.servers": "kafka:29092",
+        "table.include.list": "dbo.Movie",
+        "database.history.kafka.bootstrap.servers": "kafka:9092",
         "database.history.kafka.topic": "history" 
     }
 }
