@@ -453,3 +453,5 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 /.vscode
+/esdata/nodes/0
+/mssql/data

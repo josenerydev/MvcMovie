@@ -1,0 +1,12 @@
+{
+    "name": "elasticsearch-sink",
+    "topics": "mssql-server.MvcMovieContext-b095a95a-d3f1-479b-adca-25e229c822af.Movie",
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "connection.url": "http://elasticsearch:9200",
+    "type.name": "_doc",
+    "tasks.max": "1",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": false,
+    "schema.ignore": true,
+    "key.ignore": true
+}
