@@ -42,6 +42,8 @@ namespace MvcMovie.Web
                 .ForContext("RequestBody", requestBody)
                 .Information("Request information {RequestMethod} {RequestPath} information", httpContext.Request.Method, httpContext.Request.Path);
 
+            //"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms"
+
             using (var responseBodyMemoryStream = new MemoryStream())
             {
                 var originalResponseBodyReference = httpContext.Response.Body;
