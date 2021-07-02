@@ -38,7 +38,7 @@ namespace MvcMovie.Web
                 {
                     CustomFormatter = new EcsTextFormatter(),
                     AutoRegisterTemplate = true,
-                    IndexFormat = "indexlogs"
+                    IndexFormat = "indexlogs-{0:yyyy.MM.dd}"
                 })
                 .CreateLogger();
 

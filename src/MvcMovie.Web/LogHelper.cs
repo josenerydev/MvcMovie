@@ -24,7 +24,7 @@ namespace MvcMovie.Web
             diagnosticContext.Set("ContentType", httpContext.Response.ContentType);
 
             var endpoint = httpContext.GetEndpoint();
-            if (endpoint is object) // endpoint != null
+            if (endpoint != null)
             {
                 diagnosticContext.Set("EndpointName", endpoint.DisplayName);
             }

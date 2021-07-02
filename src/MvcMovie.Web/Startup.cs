@@ -50,11 +50,13 @@ namespace MvcMovie.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseSerilogRequestLogging(opts =>
-            {
-                opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
-                opts.GetLevel = LogHelper.ExcludeHealthChecks;
-            });
+            app.UseMiddleware<SerilogRequestLogger>();
+
+            //app.UseSerilogRequestLogging(opts =>
+            //{
+            //    opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+            //    opts.GetLevel = LogHelper.ExcludeHealthChecks;
+            //});
 
             app.UseRouting();
 
