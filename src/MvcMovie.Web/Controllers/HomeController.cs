@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 using MvcMovie.Web.Models;
+
+using Serilog;
+
+using System.Diagnostics;
 
 namespace MvcMovie.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IDiagnosticContext _diagnosticContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            IDiagnosticContext diagnosticContext)
         {
             _logger = logger;
+            _diagnosticContext = diagnosticContext;
         }
 
         public IActionResult Index()
         {
+            _diagnosticContext.Set("Home", nameof(Index));
             return View();
         }
 
